@@ -3,6 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const session = require('express-session');
 const loginController = require('./controllers/loginController');
 
 // Dynamically choose puppeteer variant
@@ -19,8 +20,19 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json({ limit: '250mb' }));
 
+// Session middleware
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false, httpOnly: true, maxAge: 3600000 }
+}));
+
 // Login route (must be after app is initialized and middleware is set up)
 app.post('/api/login', loginController.login);
+
+// Logout route
+app.post('/api/logout', loginController.logout);
 
 // Root health check
 app.get('/', (req, res) => {
