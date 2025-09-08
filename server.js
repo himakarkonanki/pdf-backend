@@ -16,7 +16,10 @@ const PORT = process.env.PORT || 5000;
 
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 app.use(bodyParser.json({ limit: '250mb' }));
 
 // Login route (must be after app is initialized and middleware is set up)
